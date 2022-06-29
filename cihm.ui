@@ -10,8 +10,14 @@
     <height>745</height>
    </rect>
   </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>16777215</height>
+   </size>
+  </property>
   <property name="windowTitle">
-   <string>Client SmartCity v1.2</string>
+   <string>Client SmartCity v2.1 (2022)</string>
   </property>
   <property name="windowIcon">
    <iconset>
