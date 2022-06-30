@@ -24,26 +24,28 @@ CAbonnes::CAbonnes(QObject *parent) : QObject(parent)
 int CAbonnes::verifierClient(QByteArray rfidE, QByteArray rfidS)
 {
     QByteArray rfidFile;
-    QFile abos("abo.txt");
+    int ret=0;
+    QFile abos("./abo");
        if (!abos.open(QIODevice::ReadOnly | QIODevice::Text))
            return -1;//erreur
 
        while (!abos.atEnd()) {
+           rfidFile.clear();
            QByteArray line = abos.readLine(100);
            if (line[0] != '#') {
                // spliter la ligne
                QList<QByteArray> liste_rfidFile = line.split(';')[2].split(',');
                for (int i=0 ; i<liste_rfidFile.size() ; i++) {
-                 rfidFile += QByteArray::number(liste_rfidFile.at(i).toInt(), 16).rightJustified(2,'0');
+                 rfidFile += QByteArray::number(liste_rfidFile.at(i).toInt(), 16).rightJustified(2,'0').toUpper();
                } // for
                // Comparaison
-               if ( (rfidFile==rfidE) && (rfidFile==rfidS))
-                   return 3;
                if (rfidFile == rfidE)
-                   return 1;
+                   ret += 1;
                if (rfidFile == rfidS)
-                   return 2;
+                   ret += 2;
            } // if #
        } // while
+       if (ret > 0)
+           return ret;
        return 0;//rien
 }

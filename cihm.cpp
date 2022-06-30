@@ -53,8 +53,6 @@ CIhm::CIhm(QWidget *parent)
 
 
     connect(_timer, &QTimer::timeout, this, &CIhm::on_timeout);
-    //connect(verifierClient, &CAbonnes, this, &CIhm::on_trouver);
-    //connect(this, &CIhm::sig_ajouter, _abo, &CAbonnes::ecritureFichier);
     ui->comboBox->setCurrentIndex(0);
     ui->stackedWidget->setCurrentIndex(0);
     ui->teLamp->setFontWeight(QFont::Bold);
@@ -91,7 +89,6 @@ CIhm::CIhm(QWidget *parent)
 
 CIhm::~CIhm()
 {
-    delete _timer2;
     delete _timer;
     delete _app;
     delete ui;
@@ -111,7 +108,6 @@ void CIhm::on_timeout() // ----> Gestion appel d'urgence
         ui->lAppelR->show();
     else
         ui->lAppelR->hide();
-
 }
 
 
@@ -220,9 +216,8 @@ void CIhm::on_horizontalSlider_2_valueChanged(int value)
         //ui->horizontalSlider_2->setTickPosition(QSlider::TickPosition(1));
         _mess ="Erreur de valeur";
         ui->teLamp->append(_mess);
-    }
-    else ui->lineEdit_2->setText(QString::number(value));
-
+    } else
+        ui->lineEdit_2->setText(QString::number(value));
 }
 
 /*-----------------------------------------------------------------------
@@ -322,7 +317,6 @@ void CIhm::on_pbLecRFID_clicked()
     ui->teParking->append(_mess);
 
     emit sig_lectureCommande(2,"-","-");
-
 }
 
 
@@ -348,10 +342,8 @@ void CIhm::on_pbOC_clicked()
     ui->teInter->setTextColor(QColor(0, 0, 0));
     emit sig_ecritureCommande(7,"-","-");
 
-
     ui->feuxOrange->show();
     ui->feux2Orange->show();
-
     ui->feuxOff->hide();
     ui->feux2Off->hide();
     ui->feuxRouge->hide();
@@ -372,19 +364,16 @@ void CIhm::on_pbVert_clicked()
         ui->feuxRouge->hide();
         ui->feuxOrange->hide();
         _mess = ">>Ordre envoyé: Activation du mode Manuel commande Vert pour axe horizontal";
-        ui->teInter->append(_mess);
-
         emit sig_ecritureCommande(8, "1", "vert");
-    }else{
+    } else {
         ui->feux2Vert->show();
         ui->feux2Off->hide();
         ui->feux2Rouge->hide();
         ui->feux2Orange->hide();
         _mess = ">>Ordre envoyé: Activation du mode Manuel commande Vert pour axe vertical";
-        ui->teInter->append(_mess);
-
         emit sig_ecritureCommande(8, "2", "vert");
-    }
+    } // else
+    ui->teInter->append(_mess);
 }
 
 void CIhm::on_pbOrange_clicked()
@@ -396,19 +385,16 @@ void CIhm::on_pbOrange_clicked()
         ui->feuxRouge->hide();
         ui->feuxVert->hide();
         _mess = ">>Ordre envoyé: Activation du mode Manuel commande Orange pour axe horizontal activé";
-        ui->teInter->append(_mess);
-
         emit sig_ecritureCommande(8, "1", "orange");
-    }else{
+    } else {
         ui->feux2Orange->show();
         ui->feux2Off->hide();
         ui->feux2Rouge->hide();
         ui->feux2Vert->hide();
         _mess = ">>Ordre envoyé: Activation du mode Manuel commande Orange pour axe vertical";
-        ui->teInter->append(_mess);
-
         emit sig_ecritureCommande(8, "2", "orange");
-    }
+    } // else
+    ui->teInter->append(_mess);
 }
 void CIhm::on_pbRouge_clicked()
 {
@@ -419,19 +405,16 @@ void CIhm::on_pbRouge_clicked()
         ui->feuxVert->hide();
         ui->feuxOrange->hide();
         _mess = ">>Ordre envoyé: Activation du mode Manuel commande Rouge pour axe horizontal";
-        ui->teInter->append(_mess);
-
         emit sig_ecritureCommande(8, "1", "rouge");
-    }else{
+    } else {
         ui->feux2Rouge->show();
         ui->feux2Off->hide();
         ui->feux2Vert->hide();
         ui->feux2Orange->hide();
         _mess = ">>Ordre envoyé: Activation du mode Manuel commande Rouge pour axe vertical";
-        ui->teInter->append(_mess);
-
         emit sig_ecritureCommande(8, "2", "rouge");
-    }
+    } // else
+    ui->teInter->append(_mess);
 }
 
 void CIhm::on_pbEteint_clicked()
@@ -443,19 +426,16 @@ void CIhm::on_pbEteint_clicked()
         ui->feuxRouge->hide();
         ui->feuxOrange->hide();
         _mess = ">>Ordre envoyé: Activation du mode Manuel commande Eteint pour axe horizontal";
-        ui->teInter->append(_mess);
-
         emit sig_ecritureCommande(8, "1", "eteint");
-    }else{
+    } else {
         ui->feux2Vert->hide();
         ui->feux2Off->show();
         ui->feux2Rouge->hide();
         ui->feux2Orange->hide();
         _mess = ">>Ordre envoyé: Activation du mode Manuel commande Eteint pour axe vertical";
-        ui->teInter->append(_mess);
-
         emit sig_ecritureCommande(8, "2", "eteint");
-    }
+    } // else
+    ui->teInter->append(_mess);
 }
 
 
@@ -503,11 +483,6 @@ void CIhm::on_pbAdd_clicked()
     QTableWidgetItem *newItem = ui->table->item(i,2);
     newItem->setData(Qt::EditRole, _nom);
     ui->table->setItem(i,2,newItem);
-
-    //QTableWidgetItem *newItem = new QTableWidgetItem(0);
-    //ui->table->setItem(7, 1, newItem);
-    //int i= ui->table->rowCount();
-    //ui->table->takeItem(i, 2)->setText(nom);
     emit sig_ajouter(_nom, _prenom, _rfid);
 }
 
@@ -567,41 +542,36 @@ void CIhm::on_ecritureRep(QByteArray firstWordAddress, bool etat, QByteArray val
         ui->teLamp->setTextColor(QColor(59, 113, 44));
         value = value.left(4);
         if (value == "0000"){
-            if(etat == true){
+            if (etat == true){
                 _mess = "<< Ordre executé: Eclairage OFF pour les cartes de "+QString::number(firstCard)+" à "+QString::number(lastCard);
-                ui->teLamp->append(_mess);
-            }else{
+            } else {
                 _mess = "<< Ordre non executé";
                 ui->teLamp->setTextColor(QColor(104, 18, 20));
-                ui->teLamp->append(_mess);
-            }
-        }
+            } // else etat
+            ui->teLamp->append(_mess);
+        } // if value
         if (value == "0001"){
-            if(etat == true){
+            if (etat == true){
                 _mess = "<< Ordre executé: Eclairage 50% pour les cartes de "+QString::number(firstCard)+" à "+QString::number(lastCard);
-                ui->teLamp->append(_mess);
-            }else{
+            } else {
                 _mess = "<< Ordre non executé";
                 ui->teLamp->setTextColor(QColor(104, 18, 20));
-                ui->teLamp->append(_mess);
-            }
-        }
+            } // else etat
+            ui->teLamp->append(_mess);
+        } // if value
         if (value == "0003"){
-            if(etat == true){
+            if (etat == true){
                 _mess = "<< Ordre executé: Eclairage 100% pour les cartes de "+QString::number(firstCard)+" à "+QString::number(lastCard);
                 ui->teLamp->setTextColor(QColor(59, 113, 44));
-                ui->teLamp->append(_mess);
-            }else{
+            } else {
                 _mess = "<< Ordre non executé";
                 ui->teLamp->setTextColor(QColor(104, 18, 20));
-                ui->teLamp->append(_mess);
-            }
-
-        }
+            } // else etat
+            ui->teLamp->append(_mess);
+        } // if value
         break;
     }
     case 0x80: //affichage
-    {
         ui->teParking->setTextColor(QColor(59, 113, 44));
         if (etat == true){
             _mess = "<< Ordre executé : écriture écran";
@@ -610,170 +580,151 @@ void CIhm::on_ecritureRep(QByteArray firstWordAddress, bool etat, QByteArray val
             ui->teParking->append(_mess);
             _mess = "<< 2ème ligne ="+value.left(32).right(16);
             ui->teParking->append(_mess);
-        }else{
+        } else {
             _mess = "<< Ordre non executé";
             ui->teParking->setTextColor(QColor(104, 18, 20));
             ui->teParking->append(_mess);
-        }
+        } // else
         break;
-    }
+
     case 0xA0: // Parking
-    {
         ui->teParking->setTextColor(QColor(59, 113, 44));
-        if(valeur == 1){
-            if(etat == true){
+        if (valeur == 1){
+            if (etat == true){
                 _mess = "<< Barrière Entrée Ouverte";
-                ui->teParking->append(_mess);
-            }else{
+            } else {
                 _mess = "<< Ordre non executé";
                 ui->teParking->setTextColor(QColor(104, 18, 20));
-                ui->teParking->append(_mess);
-            }
-        }
-        if(valeur == 2){
-            if(etat == true){
+            } // else etat
+            ui->teParking->append(_mess);
+        }// if valeur
+        if (valeur == 2){
+            if (etat == true){
                 _mess = "<< Barrière Entrée Fermée";
-                ui->teParking->append(_mess);
-            }else{
+            } else {
                 _mess = "<< Ordre non executé";
                 ui->teParking->setTextColor(QColor(104, 18, 20));
-                ui->teParking->append(_mess);
-            }
-        }
-        if(valeur == 4){
-            if(etat == true){
+            } // else etat
+            ui->teParking->append(_mess);
+        }// if valeur
+        if (valeur == 4){
+            if (etat == true){
                 _mess = "<< Barrière Sortie Ouverte";
-                ui->teParking->append(_mess);
-            }else{
+            } else {
                 _mess = "<< Ordre non executé";
                 ui->teParking->setTextColor(QColor(104, 18, 20));
-                ui->teParking->append(_mess);
-            }
-        }
-        if(valeur == 8){
-            if(etat == true){
+            } // else etat
+            ui->teParking->append(_mess);
+        }// if valeur
+        if (valeur == 8){
+            if (etat == true){
                 _mess = "<< Barrière Sortie Fermée";
-                ui->teParking->append(_mess);
-            }else{
+            } else {
                 _mess = "<< Ordre non executé";
                 ui->teParking->setTextColor(QColor(104, 18, 20));
-                ui->teParking->append(_mess);
-            }
-        }
+            } // else etat
+            ui->teParking->append(_mess);
+        } // if valeur
         break;
-    }
+
     case 0xAA: // Intersection
-    {
         // ----     MANUEL
         ui->teInter->setTextColor(QColor(59, 113, 44));
         // Voie 1
-        if(value == "0042"){ // OFF
-            if(etat == true){
+        if (value == "0042"){ // OFF
+            if (etat == true){
                 _mess = "<< Ordre executé: Mode manuel voie 1 OFF";
-                ui->teInter->append(_mess);
-            }else{
+            } else {
                 _mess = "<< Ordre non executé";
                 ui->teInter->setTextColor(QColor(104, 18, 20));
-                ui->teInter->append(_mess);
-            }
-        }
-        if(value == "0046"){ // VERT
-            if(etat == true){
+            } // else etat
+            ui->teInter->append(_mess);
+        } // if value
+        if (value == "0046"){ // VERT
+            if (etat == true){
                 _mess = "<<Ordre executé: Mode manuel voie 1 Vert";
-                ui->teInter->append(_mess);
             }else{
                 _mess = "<< Ordre non executé";
                 ui->teInter->setTextColor(QColor(104, 18, 20));
-                ui->teInter->append(_mess);
-            }
-        }
-        if(value == "004A"){ // ORANGE
-            if(etat == true){
+            } // else etat
+            ui->teInter->append(_mess);
+        } // if value
+        if (value == "004A"){ // ORANGE
+            if (etat == true){
                 _mess = "<<Ordre executé: Mode manuel voie 1 Orange";
-                ui->teInter->append(_mess);
-            }else{
+            } else {
                 _mess = "<< Ordre non executé";
                 ui->teInter->setTextColor(QColor(104, 18, 20));
-                ui->teInter->append(_mess);
-            }
-        }
-        if(value == "004E"){ // ROUGE
-            if(etat == true){
+            } // else etat
+            ui->teInter->append(_mess);
+        } // if value
+        if (value == "004E"){ // ROUGE
+            if (etat == true){
                 _mess = "<<Ordre executé: Mode manuel voie 1 OFF";
-                ui->teInter->append(_mess);
-            }else{
+            } else {
                 _mess = "<< Ordre non executé";
                 ui->teInter->setTextColor(QColor(104, 18, 20));
-                ui->teInter->append(_mess);
-            }
-        }
+            } // else etat
+            ui->teInter->append(_mess);
+        } // if value
         // Voie 2
-        if(value == "0082"){ // OFF
-            if(etat == true){
+        if (value == "0082"){ // OFF
+            if (etat == true){
                 _mess = "<<Ordre executé: Mode manuel voie 2 OFF";
-                ui->teInter->append(_mess);
             }else{
                 _mess = "<< Ordre non executé";
                 ui->teInter->setTextColor(QColor(104, 18, 20));
-                ui->teInter->append(_mess);
-            }
-        }
-        if(value == "0092"){ // VERT
-            if(etat == true){
+            } // else etat
+            ui->teInter->append(_mess);
+        } // if value
+        if (value == "0092"){ // VERT
+            if (etat == true){
                 _mess = "<<Ordre executé: Mode manuel voie 2 Vert";
-                ui->teInter->append(_mess);
-            }else{
+            } else {
                 _mess = "<< Ordre non executé";
                 ui->teInter->setTextColor(QColor(104, 18, 20));
-                ui->teInter->append(_mess);
-            }
-        }
-        if(value == "00A2"){ // ORANGE
-            if(etat == true){
+            } // else etat
+            ui->teInter->append(_mess);
+        } // if value
+        if (value == "00A2"){ // ORANGE
+            if (etat == true){
                 _mess = "<<Ordre executé: Mode manuel voie 2 Orange";
-                ui->teInter->append(_mess);
-            }else{
+            } else {
                 _mess = "<< Ordre non executé";
                 ui->teInter->setTextColor(QColor(104, 18, 20));
-                ui->teInter->append(_mess);
-            }
-        }
+            } // else
+            ui->teInter->append(_mess);
+        } // if value
         if(value == "00B2"){ // ROUGE
-            if(etat == true){
+            if (etat == true){
                 _mess = "<<Ordre executé: Mode manuel voie 2 Rouge";
-                ui->teInter->append(_mess);
-            }else{
+            } else {
                 _mess = "<< Ordre non executé";
                 ui->teInter->setTextColor(QColor(104, 18, 20));
-                ui->teInter->append(_mess);
-            }
-        }
-        if(value == "0001"){ // Automatique
+            } // else
+            ui->teInter->append(_mess);
+        } // if value
+        if (value == "0001"){ // Automatique
             if(etat == true){
-
                 _mess = "<<Ordre executé: Mode Automatique";
-                ui->teInter->append(_mess);
             }else{
                 _mess = "<< Ordre non executé";
                 ui->teInter->setTextColor(QColor(104, 18, 20));
-                ui->teInter->append(_mess);
-            }
-        }
-        if(value == "0000"){ // Orange Clignotant
-            if(etat == true){
-
+            } // else
+            ui->teInter->append(_mess);
+        } // if value
+        if (value == "0000"){ // Orange Clignotant
+            if (etat){
                 _mess = "<<Ordre executé: Mode Orange Clignotant";
-                ui->teInter->append(_mess);
-            }else{
+            } else {
                 _mess = "<< Ordre non executé";
                 ui->teInter->setTextColor(QColor(104, 18, 20));
-                ui->teInter->append(_mess);
-            }
-        }
+            } // else
+            ui->teInter->append(_mess);
+        } // if value
         break;
-    }
 
-    }
+    } // sw
 }
 
 void CIhm::on_lectureRep(QByteArray firstWordAddress ,QByteArray value)
@@ -802,21 +753,16 @@ void CIhm::on_lectureRep(QByteArray firstWordAddress ,QByteArray value)
                 ui->teLamp->append(_mess);
             } else {
                 valeur= valueleft4.toInt(nullptr,16);
-
-                if (valeur&0x01){
+                if (valeur&0x01)
                     _mess = "<< Présence piéton sur la carte n°"+QString::number(card);
-                    ui->teLamp->append(_mess);
-                }else{
+                else
                     _mess = "<< Absence piéton sur la carte n°"+QString::number(card);
-                    ui->teLamp->append(_mess);
-                }
-                if (valeur&0x02){
+                ui->teLamp->append(_mess);
+                if (valeur&0x02)
                     _mess = "<< Détection jour sur la carte n°"+QString::number(card);
-                    ui->teLamp->append(_mess);
-                }else{
+                else
                     _mess = "<< Détection nuit sur la carte n°"+QString::number(card);
-                    ui->teLamp->append(_mess);
-                }
+                ui->teLamp->append(_mess);
                 if (!(valeur&0x04)){
                     _mess = "<< lampadaire 1 HS sur la carte n°"+QString::number(card);
                     ui->teLamp->append(_mess);
@@ -847,140 +793,99 @@ void CIhm::on_lectureRep(QByteArray firstWordAddress ,QByteArray value)
 
     case 0xA1: // Barrières
         valeur = value.toInt(nullptr,16);
-        value = value.right(value.size()-4);
-
-        if (valeur&0x01){
-            _mess = "<< Barrière d'entrée montée";
-            ui->teParking->append(_mess);
-        }
-        if (valeur&0x02){
-            _mess = "<< Barrière d'entrée descendue";
-            ui->teParking->append(_mess);
-        }
-        if (valeur&0x04){
-            _mess = "<< Barrière de sortie montée";
-            ui->teParking->append(_mess);
-        }
-        if (valeur&0x08){
-            _mess = "<< Barrière de sortie descendue";
-            ui->teParking->append(_mess);
-        }
-        if (valeur&0x10){
-            _mess = "<< Bonton d'appel de l'entrée appuyée";
-            ui->teParking->append(_mess);
-        }
-        if (valeur&0x20){
-            _mess = "<< Bonton d'appel de la sortie appuyée";
-            ui->teParking->append(_mess);
-        }
+        _mess.clear();
         if (valeur == 0){
             _mess = "<< Les barrières ne sont ni en haut ni en bas, aucuns boutons appuyés";
             ui->teParking->append(_mess);
-        }
+        } else {
+            if (valeur&0x01)
+                _mess += "<< Barrière d'entrée baissée";
+            if (valeur&0x02)
+                _mess += " << Barrière d'entrée levée";
+            if (valeur&0x04)
+                _mess += " << Barrière de sortie baissée";
+            if (valeur&0x08)
+                _mess += " << Barrière de sortie levée";
+            if (valeur&0x10)
+                _mess += " << Véhicule devant la barrière d'entrée";
+            if (valeur&0x20)
+                _mess += " << Véhicule devant la barrière de sortie";
+            if (valeur&0x40)
+                _mess += " << Bouton d'urgence d'entrée";
+            if (valeur&0x80)
+                _mess += " << Bouton d'urgence de sortie";
+            ui->teParking->append(_mess);
+        } // else
         break;
 
     case 0xA2: // RFID Entrée et sortie
         rfidE = value.left(12);
         rfidS = value.right(12);
         if (rfidE != "000000000000"){
-            _mess = "<< Présence véhicule à l'entrée, rfid = "+rfidE;
-            ui->teParking->append(_mess);
+            _mess = "<< Présence véhicule à l'entrée, rfid = "+rfidE.right(10);
         }else{
             _mess = "<< Pas de véhicule détecté à l'entrée";
-            ui->teParking->append(_mess);
         }
+        ui->teParking->append(_mess);
         if (rfidS != "000000000000"){
-            _mess = "<< Présence véhicule à la sortie, rfid = "+rfidS;
-            ui->teParking->append(_mess);
+            _mess = "<< Présence véhicule à la sortie, rfid = "+rfidS.right(10);
         }else{
             _mess = "<< Pas de véhicule détecté à la sortie";
-            ui->teParking->append(_mess);
         }
+        ui->teParking->append(_mess);
         break;
 
     case 0xAB: // Boutons appuyés
         ui->teLamp->setTextColor(QColor(23, 41, 157));
         valeur = value.toInt(nullptr,16);
-        value = value.right(value.size()-4);
-
-        if (valeur&0x01){
-            _mess = "<< Bouton 1 est appuyé sur la voie 1";
-            ui->teInter->append(_mess);
-        }
-        if (valeur&0x02){
-            _mess = "<< Bouton 2 est appuyé sur la voie 1";
-            ui->teInter->append(_mess);
-        }
-        if (valeur&0x04){
-            _mess = "<< Bouton 3 est appuyé sur la voie 1";
-            ui->teInter->append(_mess);
-        }
-        if (valeur&0x08){
-            _mess = "<< Bouton 4 est appuyé sur la voie 1";
-            ui->teInter->append(_mess);
-        }
         if ( !(valeur&0x0F) ){
             _mess = "<< Aucun bouton appuyé sur la voie 1";
-            ui->teInter->append(_mess);
-        }
-        if (valeur&0x10){
-            _mess = "<< Bouton 1 est appuyé sur la voie 2";
-            ui->teInter->append(_mess);
-        }
-        if (valeur&0x20){
-            _mess = "<< Bouton 2 est appuyé sur la voie 2";
-            ui->teInter->append(_mess);
-        }
-        if (valeur&0x40){
-            _mess = "<< Bouton 3 est appuyé sur la voie 2";
-            ui->teInter->append(_mess);
-        }
-        if (valeur&0x80){
-            _mess = "<< Bouton 4 est appuyé sur la voie 2";
-            ui->teInter->append(_mess);
-        }
+        } else {
+            if (valeur&0x01)
+                _mess = "<< Bouton 1 est appuyé sur la voie 1";
+            if (valeur&0x02)
+                _mess = "<< Bouton 2 est appuyé sur la voie 1";
+            if (valeur&0x04)
+                _mess = "<< Bouton 3 est appuyé sur la voie 1";
+            if (valeur&0x08)
+                _mess = "<< Bouton 4 est appuyé sur la voie 1";
+        } // else
+        ui->teInter->append(_mess);
         if ( !(valeur&0xF0) ){
             _mess = "<< Aucun bouton appuyé sur la voie 2";
-            ui->teInter->append(_mess);
-        }
+        } else {
+            if (valeur&0x10)
+                _mess = "<< Bouton 1 est appuyé sur la voie 2";
+            if (valeur&0x20)
+                _mess = "<< Bouton 2 est appuyé sur la voie 2";
+            if (valeur&0x40)
+                _mess = "<< Bouton 3 est appuyé sur la voie 2";
+            if (valeur&0x80)
+                _mess = "<< Bouton 4 est appuyé sur la voie 2";
+        } // else
+        ui->teInter->append(_mess);
         break;
 
     case 0xB0:  // PLACE DE PARKING
-            valeur = value.toInt(nullptr,16);
-            if (valeur & 0x01)
-                ui->lVoiture1->setVisible(true);
-            else
-                ui->lVoiture1->setVisible(false);
-            if (valeur & 0x02)
-                ui->lVoiture2->setVisible(true);
-            else
-                ui->lVoiture2->setVisible(false);
-            if (valeur & 0x04)
-                ui->lVoiture3->setVisible(true);
-            else
-                ui->lVoiture3->setVisible(false);
-            if (valeur & 0x08)
-                ui->lVoiture4->setVisible(true);
-            else
-                ui->lVoiture4->setVisible(false);
-            if (valeur & 0x10)
-                ui->lVoiture5->setVisible(true);
-            else
-                ui->lVoiture5->setVisible(false);
-            if (valeur & 0x20)
-                ui->lVoiture6->setVisible(true);
-            else
-                ui->lVoiture6->setVisible(false);
-            if (valeur & 0x40)
-                ui->lVoiture7->setVisible(true);
-            else
-                ui->lVoiture7->setVisible(false);
-            if (valeur & 0x80)
-                ui->lVoiture8->setVisible(true);
-            else
-                ui->lVoiture8->setVisible(false);
-
-            break;
+        bool aff;
+        valeur = value.toInt(nullptr,16);
+        (valeur&0x01?aff=true:aff=false);
+        ui->lVoiture1->setVisible(aff);
+        (valeur&0x02?aff=true:aff=false);
+        ui->lVoiture2->setVisible(aff);
+        (valeur&0x04?aff=true:aff=false);
+        ui->lVoiture3->setVisible(aff);
+        (valeur&0x08?aff=true:aff=false);
+        ui->lVoiture4->setVisible(aff);
+        (valeur&0x10?aff=true:aff=false);
+        ui->lVoiture5->setVisible(aff);
+        (valeur&0x20?aff=true:aff=false);
+        ui->lVoiture6->setVisible(aff);
+        (valeur&0x40?aff=true:aff=false);
+        ui->lVoiture7->setVisible(aff);
+        (valeur&0x80?aff=true:aff=false);
+        ui->lVoiture8->setVisible(aff);
+        break;
     } // sw
 }
 
@@ -989,21 +894,21 @@ void CIhm::on_trouver(int oui)
     switch (oui) {
     case 0://r
         _mess = "<< Aucun rfid correspondant à un abonnement dans la base de données ";
-        ui->teParking->append(_mess);
         break;
     case 1://en
         _mess = "<< Le rfid de l'entrée correspond à un abonnement dans la base de données ";
-        ui->teParking->append(_mess);
         break;
     case 2://sor
         _mess = "<< Le rfid de la sortie correspond à un abonnement dans la base de données ";
-        ui->teParking->append(_mess);
         break;
     case 3://les2  POSSIBLE CA ???
         _mess = "<< Le rfid de l'entrée et de la sortie correspondent à un abonnement dans la base de données ";
-        ui->teParking->append(_mess);
+        break;
+    default:
+        _mess = "CIhm::on_trouver << Message de retour incorrecte !";
         break;
     }
+    ui->teParking->append(_mess);
 }
-// FAIRE LE CONNECT ABONNEMENTS
+
 

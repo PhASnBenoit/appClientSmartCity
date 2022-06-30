@@ -45,12 +45,14 @@ void CApp::on_lectureRep(QByteArray firstWordAddress, QByteArray value)
     if (firstWordAddress == "00A2"){ // trame lecture rfid
         QByteArray rfidE = value.left(12).right(10);
         QByteArray rfidS = value.right(12).right(10);
-        int ui = _abo->verifierClient(rfidE,rfidS);
-        if (ui == -1)qDebug()<<"CApp::on_lectureRep  erreur !!!";
-        else{
+        int ui = _abo->verifierClient(rfidE.right(10),rfidS.right(10));
+        if (ui == -1)
+            qDebug()<<"CApp::on_lectureRep  erreur !!!";
+        else {
+            qDebug()<<"CApp::on_lectureRep  erreur !!!";
             emit sig_trouver(ui);
-        }
-    }
+        } // else
+    } // if A2
 }
 
 
